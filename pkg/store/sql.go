@@ -52,7 +52,7 @@ func SqlStore(db *sql.DB) StoreInterface {
 	}
 
 	func (s *sqlStore) CreatePatient(patient domain.Patient) error {
-		query := "insert into patients (dni, name, LastName, address, dischargedate) values (?, ?, ?, ?, ?)"
+		query := "insert into patients (dni, name, lastname, address, dischargedate) values (?, ?, ?, ?, ?)"
 		sttm, err := s.db.Prepare(query)
 		if err != nil {
 			return err

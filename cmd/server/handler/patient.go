@@ -60,7 +60,7 @@ func (h *patientHandler) Post() gin.HandlerFunc {
 		var patient domain.Patient
 		err := c.ShouldBindJSON(&patient)
 		if err != nil {
-			web.Failure(c, 400, err)
+			web.Failure(c, 477, err)
 			return
 		}
 		valid, err := validateEmptys(&patient)

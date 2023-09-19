@@ -7,12 +7,12 @@ CREATE TABLE Dentists (
 
 -- Create the Patients table
 CREATE TABLE Patients (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    VARCHAR(255) NOT NULL,
-    LastName VARCHAR(255) NOT NULL,
-    Name VARCHAR(255) NOT NULL,
-    Address VARCHAR(255),
-    DischargeDate DATE
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    dni VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(255),
+    dischargedate DATE
 );
 
 -- Create the Appointments table
