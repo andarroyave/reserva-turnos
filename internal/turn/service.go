@@ -10,6 +10,7 @@ type IService interface {
 	UpdateTurn(t domain.Turn) (*domain.Turn, error)
 	UpdateTurnFields(t domain.Turn) (*domain.Turn, error)
 	DeleteTurn(id int64) (string , error)
+	GetTurnByDNI(dni string) ([]domain.Turn, error)
 }
 
 type Service struct {
@@ -54,4 +55,12 @@ func (s *Service) DeleteTurn(id int64) (string , error) {
 		return "", err
 	}
 	return res, nil
+}
+
+func (s *Service) GetTurnByDNI(dni string) ([]domain.Turn, error) {
+	turns, err := s.Repository.GetTurnByDNI(dni)
+	if err != nil {
+		return nil, err
+	}
+	return turns, nil
 }

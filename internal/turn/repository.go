@@ -13,7 +13,8 @@ type IRepository interface {
 	CreateTurn(t domain.Turn) (*domain.Turn, error)
 	UpdateTurn(t domain.Turn) (*domain.Turn, error)
 	UpdateTurnFields(t domain.Turn) (*domain.Turn, error)
-	DeleteTurn(id int64) (string , error)
+	DeleteTurn(id int64) (string, error)
+	GetTurnByDNI(dni string) ([]domain.Turn, error)
 }
 
 type Repository struct {
@@ -56,11 +57,20 @@ func (r *Repository) UpdateTurnFields(t domain.Turn) (*domain.Turn, error) {
 	return turn, nil
 }
 
-func (r *Repository) DeleteTurn(id int64) (string , error) {
+func (r *Repository) DeleteTurn(id int64) (string, error) {
 	res, err := r.Store.DeleteTurn(id)
 	if err != nil {
 		println(err.Error())
 		return "", web.NewNoFoundApiError(fmt.Sprintf("turn id: %d not found for delete", id))
 	}
 	return res, nil
+}
+
+func (r *Repository) GetTurnByDNI(dni string) ([]domain.Turn, error) {
+	turns, err := r.Store.GetTurnByDNI(dni)
+	if err != nil {
+		println(err.Error())
+		return nil, web.NewNoFoundApiError(fmt.Sprintf("turn dni: %d not found", dni))
+	}
+	return turns, nil
 }

@@ -34,7 +34,7 @@ func main() {
 	turnServer.PUT("/:id", turnHandler.UpdateTurn)
 	turnServer.PATCH("/:id", turnHandler.UpdateTurnFields)
 	turnServer.DELETE("/:id", turnHandler.DeleteTurn)
-	// turnServer.GET("/", GetTurnByDNI)
+	turnServer.GET("/", turnHandler.GetTurnByDNI)
 	server.Run(":8085")
 
 }

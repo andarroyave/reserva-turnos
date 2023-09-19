@@ -119,3 +119,20 @@ func (h *TurnHandler) DeleteTurn(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &turnFound)
 
 }
+
+func (h *TurnHandler) GetTurnByDNI(ctx *gin.Context) {
+	dni := ctx.Query("dni")
+	turnsFound, errFound := h.TurnService.GetTurnByDNI(dni)
+	if errFound != nil {
+		println(errFound.Error())
+		if apiErr, ok := errFound.(*web.ErrorApi); ok {
+			ctx.AbortWithStatusJSON(apiErr.Status, apiErr)
+			return
+		}
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, errFound)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &turnsFound)
+
+}
