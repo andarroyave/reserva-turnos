@@ -1,9 +1,9 @@
 package domain
 
 type Patient struct {
-	Id            int64  `json:"id"`
+	ID            int64  `json:"ID"`
 	Name          string `json:"name"`
-	LastName      string `json:"lastname"`
+	LastName      string `json:"LastName"`
 	Address       string `json:"address"`
 	DNI           string `json:"dni"`
 	DischargeDate string `json:"discharge_date"`

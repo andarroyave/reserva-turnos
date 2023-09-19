@@ -7,6 +7,6 @@ type StoreInterface interface {
 	ReadAllPatients() ([]domain.Patient, error)
 	CreatePatient(patient domain.Patient) error
 	UpdatePatient(patient domain.Patient) error
-	DeletePatient(id int) error
+	DeletePatient(ID int) error
 	ExistsPatient(dni string) bool
 }
