@@ -57,6 +57,7 @@ func (s *Service) DeleteTurn(id int64) (string , error) {
 	return res, nil
 }
 
+
 func (s *Service) GetTurnByDNI(dni string) ([]domain.Turn, error) {
 	turns, err := s.Repository.GetTurnByDNI(dni)
 	if err != nil {
