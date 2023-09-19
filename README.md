@@ -44,4 +44,10 @@ Crear tablas con script db.sql
 
 ![postman6](images/postman6.png)
 
+### 4- Middleware Auth
 
+![auth1](images/auth1.png)
+
+#### Con key erronea:
+
+![auth2](images/auth2.png)
