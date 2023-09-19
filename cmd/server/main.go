@@ -28,21 +28,13 @@ func main() {
 	}
 
 	storage := store.SqlStore(db)
-	/*	repo := dentist.NewRepository(storage)
-		service := dentist.NewService(repo)
-		dentistHandler := handler.NewDentistHandler(service)*/
 	repo := patient.NewRepository(storage)
 	service := patient.NewService(repo)
 	patientHandler := handler.NewPatientHandler(service)
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
-	/*
-		dentists := r.Group("/dentists")
-		{
 
-		}
-	*/
 	patients := r.Group("/patients")
 	{
 		patients.GET("/getByID/:id", patientHandler.GetByID())
@@ -51,11 +43,5 @@ func main() {
 		patients.DELETE("/:id", patientHandler.Delete())
 		patients.PUT("/:id", patientHandler.Put())
 	}
-	/*
-		appointments := r.Group("/appointments")
-		{
-
-		}
-	*/
 	r.Run(":8080")
 }

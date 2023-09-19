@@ -28,12 +28,12 @@ func (h *patientHandler) GetByID() gin.HandlerFunc {
 			web.Failure(c, 400, errors.New("invalid id"))
 			return
 		}
-		product, err := h.s.GetByID(id)
+		patient, err := h.s.GetByID(id)
 		if err != nil {
 			web.Failure(c, 404, errors.New("patient not found"))
 			return
 		}
-		web.Success(c, 200, product)
+		web.Success(c, 200, patient)
 	}
 }
 
