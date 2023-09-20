@@ -1,0 +1,100 @@
+info:
+  contact: {}
+  description: This API Handle Products
+  license:
+    name: Apache 2.0
+  title: PI Reserva Turnos
+  version: "1.0"
+paths:
+  /turns:
+    delete:
+      description: Delete turn
+      parameters:
+      - description: turn id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Delete turn by id
+      tags:
+      - Turn
+    get:
+      description: Get turn
+      parameters:
+      - description: patient dni
+        in: body
+        name: dni
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get turn by DNI
+      tags:
+      - Turn
+    patch:
+      consumes:
+      - application/json
+      description: Update turn
+      parameters:
+      - description: turn id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update turn by fields
+      tags:
+      - Turn
+    post:
+      consumes:
+      - application/json
+      description: Create turn
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create turn
+      tags:
+      - Turn
+    put:
+      consumes:
+      - application/json
+      description: Update turn
+      parameters:
+      - description: turn id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update turn by id
+      tags:
+      - Turn
+  /turns/:id:
+    get:
+      description: Get turn
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get turn by id
+      tags:
+      - Turn
+swagger: "2.0"
