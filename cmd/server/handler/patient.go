@@ -3,7 +3,7 @@ package handler
 import (
 	"errors"
 	"strconv"
-
+	"fmt"
 	"github.com/andarroyave/reserva-turnos/internal/domain"
 	"github.com/andarroyave/reserva-turnos/internal/patient"
 	"github.com/andarroyave/reserva-turnos/pkg/web"
@@ -37,6 +37,7 @@ func (h *patientHandler) GetById() gin.HandlerFunc {
 		}
 		patient, err := h.s.GetById(id)
 		if err != nil {
+			fmt.Print(err.Error())
 			web.Failure(c, 404, errors.New("patient not found"))
 			return
 		}
