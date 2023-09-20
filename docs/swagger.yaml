@@ -1,0 +1,168 @@
+info:
+  contact: {}
+  description: This API Handle Products
+  license:
+    name: Apache 2.0
+  title: PI Reserva Turnos
+  version: "1.0"
+paths:
+  /patient:
+    delete:
+      description: Delete patient
+      parameters:
+      - description: patient id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Delete patient by id
+      tags:
+      - Patient
+  /patients:
+    post:
+      consumes:
+      - application/json
+      description: Create patient
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create patient
+      tags:
+      - Patient
+    put:
+      consumes:
+      - application/json
+      description: Update patient
+      parameters:
+      - description: patient id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update patient by id
+      tags:
+      - Patient
+  /patients/:id:
+    get:
+      description: Get patient
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get patient by Id
+      tags:
+      - Patient
+  /patients/GetAll:
+    get:
+      description: Get All patients
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get all patients
+      tags:
+      - Patient
+  /turns:
+    delete:
+      description: Delete turn
+      parameters:
+      - description: turn id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Delete turn by id
+      tags:
+      - Turn
+    get:
+      description: Get turn
+      parameters:
+      - description: patient dni
+        in: body
+        name: dni
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get turn by DNI
+      tags:
+      - Turn
+    patch:
+      consumes:
+      - application/json
+      description: Update turn
+      parameters:
+      - description: turn id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update turn by fields
+      tags:
+      - Turn
+    post:
+      consumes:
+      - application/json
+      description: Create turn
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create turn
+      tags:
+      - Turn
+    put:
+      consumes:
+      - application/json
+      description: Update turn
+      parameters:
+      - description: turn id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update turn by id
+      tags:
+      - Turn
+  /turns/:id:
+    get:
+      description: Get turn
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get turn by id
+      tags:
+      - Turn
+swagger: "2.0"
