@@ -62,10 +62,9 @@ func main() {
 	// Rutas para Dentistas
 	dentistServer := server.Group("/dentists")
 	dentistServer.GET("/:id", dentistHandler.GetDentistById)
-	dentistServer.POST("/", authMid.AuthHeader, dentistHandler.CreateDentist)
-	dentistServer.PUT("/:id", authMid.AuthHeader, dentistHandler.UpdateDentist)
-	dentistServer.PATCH("/:id", authMid.AuthHeader, dentistHandler.UpdateDentistFields)
-	dentistServer.DELETE("/:id", authMid.AuthHeader, dentistHandler.DeleteDentist)
+	dentistServer.POST("/", authMid.AuthHeader, dentistHandler.createDentist)
+	dentistServer.PUT("/:id", authMid.AuthHeader, dentistHandler.PutDentistById)
+	dentistServer.DELETE("/:id", authMid.AuthHeader, dentistHandler.DeleteDentistById)
 
 	// Rutas para Turnos
 	turnServer := server.Group("/turns")
