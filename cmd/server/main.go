@@ -32,7 +32,7 @@ func main() {
 	secretKey := os.Getenv("SECRET_KEY")
 	publicKey := "public"
 
-	datasource := "root:Digital-21@tcp(localhost:3306)/reserva-turnos"
+	datasource := "root:password@tcp(localhost:3306)/reserva-turnos"
 	TurnsDB, err := sql.Open("mysql", datasource)
 	if err != nil {
 		panic(err)

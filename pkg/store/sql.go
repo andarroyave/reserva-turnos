@@ -265,7 +265,7 @@ func (s *SqlStore) GetTurnByDNI(dni string) ([]domain.Turn, error) {
 // Dentist
 var ErrDentistNotFound = errors.New("dentist not found")
 
-func (s *SqlStore) GetDentistById(id int) (domain.Dentist, error) {
+func (s *SqlStore) GetByIdDentist(id int) (domain.Dentist, error) {
 	var dentist domain.Dentist
 
 	query := fmt.Sprintf("SELECT * FROM dentists WHERE id = %d;", id)
@@ -301,7 +301,7 @@ func (s *SqlStore) ModifyByIdDentist(id int, dentist domain.Dentist) (domain.Den
 	return dentist, nil
 }
 
-func (s *SqlStore) DeleteDentist(id int) error {
+func (s *SqlStore) DeleteByIdDentist(id int) error {
 	query := fmt.Sprintf("DELETE FROM dentists WHERE id = %d;", id)
 	_, err := s.DB.Exec(query)
 	if err != nil {
