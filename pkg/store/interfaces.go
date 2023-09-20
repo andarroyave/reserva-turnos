@@ -10,3 +10,12 @@ type StoreInterface interface {
 	DeletePatient(id int) error
 	ExistsPatient(dni string) bool
 }
+
+// DentistInterface es una interfaz que incluye los métodos relacionados con los dentistas.
+type DentistInterface interface {
+	GetByIdDentist(id int) (domain.Dentist, error)
+	GetAllDentist() ([]domain.Dentist, error)
+	CreateDentist(dentist domain.Dentist) (domain.Dentist, error)
+	ModifyByIdDentist(id int, dentist domain.Dentist) (domain.Dentist, error)
+	DeleteByIdDentist(id int) error
+}

@@ -4,49 +4,31 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/andarroyave/reserva-turnos/internal/dentist"
 	"github.com/andarroyave/reserva-turnos/internal/domain"
 	"github.com/gin-gonic/gin"
 )
 
-type DentistsGetter interface {
-	GetByMatriculation(matriculation int) (domain.Dentist, error)
-	GetAll() ([]domain.Dentist, error)
+type DentistHandler struct {
+	DentistService dentist.Service
 }
 
-type DentistCreator interface {
-	Create(dentist domain.Dentist) (domain.Dentist, error)
-	ModifyByMatriculation(matriculation int, dentist domain.Dentist) (domain.Dentist, error)
-	DeleteByMatriculation(matriculation int) error
-}
-
-type DentistsHandler struct {
-	dentistsGetter  DentistsGetter
-	dentistsCreator DentistCreator
-}
-
-func NewDentistsHandler(getter DentistsGetter, creator DentistCreator) *DentistsHandler {
-	return &DentistsHandler{
-		dentistsGetter:  getter,
-		dentistsCreator: creator,
-	}
-}
-
-// GetDentistByMatriculation godoc
-// @Summary      Gets a dentist by matriculation
-// @Description  Gets a dentist by matriculation from the repository
+// GetDentistById godoc
+// @Summary      Gets a dentist by ID
+// @Description  Gets a dentist by ID from the repository
 // @Tags         dentists
 // @Produce      json
-// @Param        matriculation path int true "Matriculation"
+// @Param        id path int true "Dentist ID"
 // @Success      200 {object} domain.Dentist
-// @Router       /dentists/{matriculation} [get]
-func (ph *DentistsHandler) GetDentistByMatriculation(ctx *gin.Context) {
-	matriculationParam := ctx.Param("matriculation")
-	matriculation, err := strconv.Atoi(matriculationParam)
+// @Router       /dentists/{id} [get]
+func (dh *DentistHandler) GetDentistById(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid matriculation"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
 		return
 	}
-	dentist, err := ph.dentistsGetter.GetByMatriculation(matriculation)
+	dentist, err := dh.DentistService.GetById(id)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "Dentist not found"})
 		return
@@ -54,20 +36,20 @@ func (ph *DentistsHandler) GetDentistByMatriculation(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, dentist)
 }
 
-// PutDentistByMatriculation godoc
-// @Summary      Modifies a dentist by matriculation
-// @Description  Modifies a dentist by matriculation in the repository
+// PutDentistById godoc
+// @Summary      Modifies a dentist by ID
+// @Description  Modifies a dentist by ID in the repository
 // @Tags         dentists
 // @Produce      json
-// @Param        matriculation path int true "Matriculation"
-// @Param        dentist body DentistRequest true "Dentist data"
+// @Param        id path int true "Dentist ID"
+// @Param        dentist body Dentist true "Dentist data"
 // @Success      200 {object} domain.Dentist
-// @Router       /dentists/{matriculation} [put]
-func (ph *DentistsHandler) PutDentistByMatriculation(ctx *gin.Context) {
-	matriculationParam := ctx.Param("matriculation")
-	matriculation, err := strconv.Atoi(matriculationParam)
+// @Router       /dentists/{id} [put]
+func (dh *DentistHandler) PutDentistById(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid matriculation"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
 		return
 	}
 	var dentistRequest domain.Dentist
@@ -75,7 +57,7 @@ func (ph *DentistsHandler) PutDentistByMatriculation(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	dentist, err := ph.dentistsCreator.ModifyByMatriculation(matriculation, dentistRequest)
+	dentist, err := dh.DentistService.ModifyById(id, dentistRequest)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "internal error"})
 		return
@@ -83,22 +65,22 @@ func (ph *DentistsHandler) PutDentistByMatriculation(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, dentist)
 }
 
-// DeleteDentistByMatriculation godoc
-// @Summary      Deletes a dentist by matriculation
-// @Description  Deletes a dentist by matriculation from the repository
+// DeleteDentistById godoc
+// @Summary      Deletes a dentist by ID
+// @Description  Deletes a dentist by ID from the repository
 // @Tags         dentists
 // @Produce      json
-// @Param        matriculation path int true "Matriculation"
+// @Param        id path int true "Dentist ID"
 // @Success      204 "No Content"
-// @Router       /dentists/{matriculation} [delete]
-func (ph *DentistsHandler) DeleteDentistByMatriculation(ctx *gin.Context) {
-	matriculationParam := ctx.Param("matriculation")
-	matriculation, err := strconv.Atoi(matriculationParam)
+// @Router       /dentists/{id} [delete]
+func (dh *DentistHandler) DeleteDentistById(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid matriculation"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
 		return
 	}
-	err = ph.dentistsCreator.DeleteByMatriculation(matriculation)
+	err = dh.DentistService.DeleteById(id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "internal error"})
 		return
