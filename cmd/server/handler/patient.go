@@ -20,7 +20,7 @@ func NewPatientHandler(s patient.Service) *patientHandler {
 	}
 }
 
-func (h *patientHandler) GetByID() gin.HandlerFunc {
+func (h *patientHandler) GetById() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
 		id, err := strconv.Atoi(idParam)
@@ -28,7 +28,7 @@ func (h *patientHandler) GetByID() gin.HandlerFunc {
 			web.Failure(c, 400, errors.New("invalid id"))
 			return
 		}
-		patient, err := h.s.GetByID(id)
+		patient, err := h.s.GetById(id)
 		if err != nil {
 			web.Failure(c, 404, errors.New("patient not found"))
 			return
@@ -120,7 +120,7 @@ func (h *patientHandler) Put() gin.HandlerFunc {
 			web.Failure(c, 400, errors.New("invalid id"))
 			return
 		}
-		_, err = h.s.GetByID(id)
+		_, err = h.s.GetById(id)
 		if err != nil {
 			web.Failure(c, 404, errors.New("patient not found"))
 			return

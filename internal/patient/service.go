@@ -3,11 +3,11 @@ package patient
 import "github.com/andarroyave/reserva-turnos/internal/domain"
 
 type Service interface {
-	GetByID(ID int) (domain.Patient, error)
+	GetById(Id int) (domain.Patient, error)
 	GetAllPatients() ([]domain.Patient, error)
 	CreatePatient(p domain.Patient) (domain.Patient, error)
-	DeletePatient(ID int) error
-	UpdatePatient(ID int, u domain.Patient) (domain.Patient, error)
+	DeletePatient(Id int) error
+	UpdatePatient(Id int, u domain.Patient) (domain.Patient, error)
 }
 
 type service struct {
@@ -18,8 +18,8 @@ func NewService(r Repository) Service {
 	return &service{r}
 }
 
-func (s *service) GetByID(ID int) (domain.Patient, error) {
-	p, err := s.r.GetByID(ID)
+func (s *service) GetById(Id int) (domain.Patient, error) {
+	p, err := s.r.GetById(Id)
 	if err != nil {
 		return domain.Patient{}, err
 	}
@@ -43,16 +43,16 @@ func (s service) CreatePatient(p domain.Patient) (domain.Patient, error) {
 	return p, nil
 }
 
-func (s *service) DeletePatient(ID int) error {
-	err := s.r.DeletePatient(ID)
+func (s *service) DeletePatient(Id int) error {
+	err := s.r.DeletePatient(Id)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *service) UpdatePatient(ID int, u domain.Patient) (domain.Patient, error) {
-	p, err := s.r.GetByID(ID)
+func (s *service) UpdatePatient(Id int, u domain.Patient) (domain.Patient, error) {
+	p, err := s.r.GetById(Id)
 	if err != nil {
 		return domain.Patient{}, err
 	}

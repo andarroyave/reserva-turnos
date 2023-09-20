@@ -9,10 +9,10 @@ import (
 )
 
 type Repository interface {
-	GetByID(ID int) (domain.Patient, error)
+	GetById(Id int) (domain.Patient, error)
 	GetAllPatients() ([]domain.Patient, error)
 	CreatePatient(p domain.Patient) (domain.Patient, error)
-	DeletePatient(ID int) error
+	DeletePatient(Id int) error
 	UpdatePatient(DNI string, p domain.Patient) (domain.Patient, error)
 }
 
@@ -24,8 +24,8 @@ func NewRepository(storage store.StoreInterface) Repository {
 	return &repository{storage}
 }
 
-func (r *repository) GetByID(ID int) (domain.Patient, error) {
-	patient, err := r.storage.ReadPatient(ID)
+func (r *repository) GetById(Id int) (domain.Patient, error) {
+	patient, err := r.storage.ReadPatient(Id)
 	if err != nil {
 		return domain.Patient{}, errors.New("patient not found")
 	}
@@ -53,8 +53,8 @@ func (r *repository) CreatePatient(p domain.Patient) (domain.Patient, error) {
 	return p, nil
 }
 
-func (r *repository) DeletePatient(ID int) error {
-	err := r.storage.DeletePatient(ID)
+func (r *repository) DeletePatient(Id int) error {
+	err := r.storage.DeletePatient(Id)
 	if err != nil {
 		return err
 	}
