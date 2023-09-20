@@ -14,6 +14,12 @@ type StoreInterface interface {
 	CreateTurn(turn domain.Turn) (*domain.Turn, error)
 	UpdateTurn(turn domain.Turn) (*domain.Turn, error)
 	UpdateTurnFields(turn domain.Turn) (*domain.Turn, error)
-	DeleteTurn(id int64) (string , error)
+	DeleteTurn(id int64) (string, error)
 	GetTurnByDNI(dni string) ([]domain.Turn, error)
+
+	//Dentist
+	GetByIdDentist(id int) (domain.Dentist, error)
+	CreateDentist(dentist domain.Dentist) (domain.Dentist, error)
+	ModifyByIdDentist(id int, dentist domain.Dentist) (domain.Dentist, error)
+	DeleteByIdDentist(id int) error
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/andarroyave/reserva-turnos/cmd/server/handler"
 	"github.com/andarroyave/reserva-turnos/cmd/server/middlewares"
 	"github.com/andarroyave/reserva-turnos/docs"
+	"github.com/andarroyave/reserva-turnos/internal/dentist"
 	"github.com/andarroyave/reserva-turnos/internal/patient"
 	"github.com/andarroyave/reserva-turnos/internal/turn"
 	"github.com/andarroyave/reserva-turnos/pkg/store"
@@ -53,7 +54,9 @@ func main() {
 	service := patient.NewService(repo)
 	patientHandler := handler.NewPatientHandler(service)
 
-	
+	repoDentist := dentist.NewRepository(&storage)
+	serviceDentist := dentist.NewService(repoDentist)
+	dentistHandler := handler.NewDentistHandler(serviceDentist)
 
 	docs.SwaggerInfo.Host = "localhost:8085"
 	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -67,8 +70,6 @@ func main() {
 		patients.PUT("/:id", authMid.AuthHeader, patientHandler.Put())
 	}
 
-
-
 	turnServer := server.Group("/turns")
 	turnServer.GET("/:id", turnHandler.GetTurnById)
 	turnServer.POST("/", authMid.AuthHeader, turnHandler.CreateTurn)
@@ -78,4 +79,11 @@ func main() {
 	turnServer.GET("/", turnHandler.GetTurnByDNI)
 	server.Run(":8085")
 
+	dentists := server.Group("/dentists")
+	{
+		dentists.GET("/getByID/:id", dentistHandler.GetDentistById())
+		dentists.POST("", authMid.AuthHeader, dentistHandler.CreateDentist())
+		dentists.DELETE("/:id", authMid.AuthHeader, dentistHandler.DeleteDentistById())
+		dentists.PUT("/:id", authMid.AuthHeader, dentistHandler.PutDentistById())
+	}
 }

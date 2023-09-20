@@ -261,3 +261,51 @@ func (s *SqlStore) GetTurnByDNI(dni string) ([]domain.Turn, error) {
 	}
 	return turns, nil
 }
+
+// Dentist
+var ErrDentistNotFound = errors.New("dentist not found")
+
+func (s *SqlStore) GetDentistById(id int) (domain.Dentist, error) {
+	var dentist domain.Dentist
+
+	query := fmt.Sprintf("SELECT * FROM dentists WHERE id = %d;", id)
+	row := s.DB.QueryRow(query)
+	err := row.Scan(&dentist.Id, &dentist.Registration, &dentist.LastName, &dentist.Name)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return domain.Dentist{}, ErrDentistNotFound
+		}
+		return domain.Dentist{}, err
+	}
+	return dentist, nil
+}
+
+func (s *SqlStore) CreateDentist(dentist domain.Dentist) (domain.Dentist, error) {
+	query := fmt.Sprintf("INSERT INTO dentists (Registration, LastName, FirstName) VALUES ('%s', '%s', '%s');",
+		dentist.Registration, dentist.LastName, dentist.Name)
+	_, err := s.DB.Exec(query)
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+	return dentist, nil
+}
+
+func (s *SqlStore) ModifyByIdDentist(id int, dentist domain.Dentist) (domain.Dentist, error) {
+	query := fmt.Sprintf("UPDATE dentists SET Registration = '%s', LastName = '%s', FirstName = '%s' WHERE id = %d;",
+		dentist.Registration, dentist.LastName, dentist.Name, id)
+	_, err := s.DB.Exec(query)
+	if err != nil {
+		return domain.Dentist{}, err
+	}
+	dentist.Id = int64(id)
+	return dentist, nil
+}
+
+func (s *SqlStore) DeleteDentist(id int) error {
+	query := fmt.Sprintf("DELETE FROM dentists WHERE id = %d;", id)
+	_, err := s.DB.Exec(query)
+	if err != nil {
+		return err
+	}
+	return nil
+}
