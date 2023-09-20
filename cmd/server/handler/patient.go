@@ -20,6 +20,13 @@ func NewPatientHandler(s patient.Service) *patientHandler {
 	}
 }
 
+// GetPatientById godoc
+// @Summary Get patient by Id
+// @Tags Patient
+// @Description Get patient
+// @Produce json
+// @Success 200
+// @Router /patients/:id [get]
 func (h *patientHandler) GetById() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idParam := c.Param("id")
@@ -37,6 +44,13 @@ func (h *patientHandler) GetById() gin.HandlerFunc {
 	}
 }
 
+// GetAllPatients godoc
+// @Summary Get all patients
+// @Tags Patient
+// @Description Get All patients
+// @Produce json
+// @Success 200
+// @Router /patients/GetAll [get]
 func (h *patientHandler) GetAllPatients() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		patients, err := h.s.GetAllPatients()
@@ -55,6 +69,14 @@ func validateEmptys(patient *domain.Patient) (bool, error) {
 	return true, nil
 }
 
+// CreatePatient godoc
+// @Summary Create patient
+// @Tags Patient
+// @Description Create patient
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /patients [post]
 func (h *patientHandler) Post() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var patient domain.Patient
@@ -77,17 +99,15 @@ func (h *patientHandler) Post() gin.HandlerFunc {
 	}
 }
 
+// DeletePatient godoc
+// @Summary Delete patient by id
+// @Tags Patient
+// @Description Delete patient
+// @Param id path int true "patient id"
+// @Success 200
+// @Router /patient [delete]
 func (h *patientHandler) Delete() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		/*		token := c.GetHeader("TOKEN")
-				if token == "" {
-					web.Failure(c, 401, errors.New("token not found"))
-					return
-				}
-				if token != os.Getenv("TOKEN") {
-					web.Failure(c, 401, errors.New("invalid token"))
-					return
-				}*/
 		idParam := c.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
@@ -103,17 +123,17 @@ func (h *patientHandler) Delete() gin.HandlerFunc {
 	}
 }
 
+// UpdatePatient godoc
+// @Summary Update patient by id
+// @Tags Patient
+// @Description Update patient
+// @Accept json
+// @Produce json
+// @Param id path int true "patient id"
+// @Success 200
+// @Router /patients [put]
 func (h *patientHandler) Put() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		/*		token := c.GetHeader("TOKEN")
-				if token == "" {
-					web.Failure(c, 401, errors.New("token not found"))
-					return
-				}
-				if token != os.Getenv("TOKEN") {
-					web.Failure(c, 401, errors.New("invalid token"))
-					return
-				}*/
 		idParam := c.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {

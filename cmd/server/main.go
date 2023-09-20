@@ -31,7 +31,7 @@ func main() {
 	secretKey := os.Getenv("SECRET_KEY")
 	publicKey := "public"
 
-	datasource := "root:password@tcp(localhost:3306)/reserva-turnos"
+	datasource := "root:Digital-21@tcp(localhost:3306)/reserva-turnos"
 	TurnsDB, err := sql.Open("mysql", datasource)
 	if err != nil {
 		panic(err)
@@ -62,9 +62,9 @@ func main() {
 	{
 		patients.GET("/getByID/:id", patientHandler.GetById())
 		patients.GET("/getAll", patientHandler.GetAllPatients())
-		patients.POST("", patientHandler.Post())
-		patients.DELETE("/:id", patientHandler.Delete())
-		patients.PUT("/:id", patientHandler.Put())
+		patients.POST("", authMid.AuthHeader, patientHandler.Post())
+		patients.DELETE("/:id", authMid.AuthHeader, patientHandler.Delete())
+		patients.PUT("/:id", authMid.AuthHeader, patientHandler.Put())
 	}
 
 
