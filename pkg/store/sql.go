@@ -13,17 +13,18 @@ type SqlStore struct {
 }
 
 func (s *SqlStore) ReadPatient(Id int) (domain.Patient, error) {
-	query := "select * from patients where Id = ?"
+	query := "select * from Patients where Id = ?"
 	row := s.DB.QueryRow(query, Id)
 	var patient domain.Patient
 	if err := row.Scan(&patient.Id, &patient.DNI, &patient.Name, &patient.LastName, &patient.Address, &patient.DischargeDate); err != nil {
+		fmt.Println(err.Error())
 		return domain.Patient{}, errors.New("patient not found")
 	}
 	return patient, nil
 }
 
 func (s *SqlStore) ReadAllPatients() ([]domain.Patient, error) {
-	query := "select * from patients"
+	query := "select * from Patients"
 	sttm, err := s.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -46,7 +47,7 @@ func (s *SqlStore) ReadAllPatients() ([]domain.Patient, error) {
 }
 
 func (s *SqlStore) CreatePatient(patient domain.Patient) error {
-	query := "insert into patients (dni, name, lastname, address, dischargedate) values (?, ?, ?, ?, ?)"
+	query := "insert into Patients (dni, name, lastname, address, dischargedate) values (?, ?, ?, ?, ?)"
 	sttm, err := s.DB.Prepare(query)
 	if err != nil {
 		return err
@@ -64,7 +65,7 @@ func (s *SqlStore) CreatePatient(patient domain.Patient) error {
 }
 
 func (s *SqlStore) UpdatePatient(patient domain.Patient) error {
-	query := "update patients set dni = ?, name = ?, LastName = ?, address = ?, dischargedate = ? where Id = ?"
+	query := "update Patients set dni = ?, name = ?, LastName = ?, address = ?, dischargedate = ? where Id = ?"
 	sttm, err := s.DB.Prepare(query)
 	if err != nil {
 		return err
@@ -80,7 +81,7 @@ func (s *SqlStore) UpdatePatient(patient domain.Patient) error {
 }
 
 func (s *SqlStore) DeletePatient(Id int) error {
-	query := "delete from patients where Id = ?"
+	query := "delete from Patients where Id = ?"
 	_, err := s.DB.Exec(query, Id)
 	if err != nil {
 		return err
@@ -268,7 +269,7 @@ var ErrDentistNotFound = errors.New("dentist not found")
 func (s *SqlStore) GetByIdDentist(id int) (domain.Dentist, error) {
 	var dentist domain.Dentist
 
-	query := fmt.Sprintf("SELECT * FROM dentists WHERE id = %d;", id)
+	query := fmt.Sprintf("SELECT * FROM Dentists WHERE id = %d;", id)
 	row := s.DB.QueryRow(query)
 	err := row.Scan(&dentist.Id, &dentist.Registration, &dentist.LastName, &dentist.Name)
 	if err != nil {
@@ -281,7 +282,7 @@ func (s *SqlStore) GetByIdDentist(id int) (domain.Dentist, error) {
 }
 
 func (s *SqlStore) CreateDentist(dentist domain.Dentist) (domain.Dentist, error) {
-	query := fmt.Sprintf("INSERT INTO dentists (Registration, LastName, FirstName) VALUES ('%s', '%s', '%s');",
+	query := fmt.Sprintf("INSERT INTO Dentists (Registration, LastName, FirstName) VALUES ('%s', '%s', '%s');",
 		dentist.Registration, dentist.LastName, dentist.Name)
 	_, err := s.DB.Exec(query)
 	if err != nil {
@@ -291,7 +292,7 @@ func (s *SqlStore) CreateDentist(dentist domain.Dentist) (domain.Dentist, error)
 }
 
 func (s *SqlStore) ModifyByIdDentist(id int, dentist domain.Dentist) (domain.Dentist, error) {
-	query := fmt.Sprintf("UPDATE dentists SET Registration = '%s', LastName = '%s', FirstName = '%s' WHERE id = %d;",
+	query := fmt.Sprintf("UPDATE Dentists SET Registration = '%s', LastName = '%s', FirstName = '%s' WHERE id = %d;",
 		dentist.Registration, dentist.LastName, dentist.Name, id)
 	_, err := s.DB.Exec(query)
 	if err != nil {
@@ -302,7 +303,7 @@ func (s *SqlStore) ModifyByIdDentist(id int, dentist domain.Dentist) (domain.Den
 }
 
 func (s *SqlStore) DeleteByIdDentist(id int) error {
-	query := fmt.Sprintf("DELETE FROM dentists WHERE id = %d;", id)
+	query := fmt.Sprintf("DELETE FROM Dentists WHERE id = %d;", id)
 	_, err := s.DB.Exec(query)
 	if err != nil {
 		return err

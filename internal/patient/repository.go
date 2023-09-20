@@ -27,6 +27,7 @@ func NewRepository(storage store.StoreInterface) Repository {
 func (r *repository) GetById(Id int) (domain.Patient, error) {
 	patient, err := r.storage.ReadPatient(Id)
 	if err != nil {
+		fmt.Printf(err.Error())
 		return domain.Patient{}, errors.New("patient not found")
 	}
 	return patient, nil

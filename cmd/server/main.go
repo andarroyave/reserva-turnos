@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"os"
-
 	"github.com/andarroyave/reserva-turnos/cmd/server/handler"
 	"github.com/andarroyave/reserva-turnos/cmd/server/middlewares"
 	"github.com/andarroyave/reserva-turnos/docs"
