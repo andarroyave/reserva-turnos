@@ -2,6 +2,7 @@ package store
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/andarroyave/reserva-turnos/internal/domain"
@@ -11,12 +12,103 @@ type SqlStore struct {
 	DB *sql.DB
 }
 
-func (s *SqlStore) GetTurnById(id int64) (*domain.Turn, error) {
+func (s *SqlStore) ReadPatient(Id int) (domain.Patient, error) {
+	query := "select * from patients where Id = ?"
+	row := s.DB.QueryRow(query, Id)
+	var patient domain.Patient
+	if err := row.Scan(&patient.Id, &patient.DNI, &patient.Name, &patient.LastName, &patient.Address, &patient.DischargeDate); err != nil {
+		return domain.Patient{}, errors.New("patient not found")
+	}
+	return patient, nil
+}
+
+func (s *SqlStore) ReadAllPatients() ([]domain.Patient, error) {
+	query := "select * from patients"
+	sttm, err := s.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer sttm.Close()
+
+	var patients []domain.Patient
+	for sttm.Next() {
+		var patient domain.Patient
+		err := sttm.Scan(&patient.Id, &patient.DNI, &patient.Name, &patient.LastName, &patient.Address, &patient.DischargeDate)
+		if err != nil {
+			return nil, err
+		}
+		patients = append(patients, patient)
+	}
+	if err = sttm.Err(); err != nil {
+		return nil, err
+	}
+	return patients, nil
+}
+
+func (s *SqlStore) CreatePatient(patient domain.Patient) error {
+	query := "insert into patients (dni, name, lastname, address, dischargedate) values (?, ?, ?, ?, ?)"
+	sttm, err := s.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer sttm.Close()
+	res, err := sttm.Exec(patient.DNI, patient.Name, patient.LastName, patient.Address, patient.DischargeDate)
+	if err != nil {
+		return err
+	}
+	_, err = res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SqlStore) UpdatePatient(patient domain.Patient) error {
+	query := "update patients set dni = ?, name = ?, LastName = ?, address = ?, dischargedate = ? where Id = ?"
+	sttm, err := s.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer sttm.Close()
+
+	_, err = sttm.Exec(patient.DNI, patient.Name, patient.LastName, patient.Address, patient.DischargeDate, patient.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *SqlStore) DeletePatient(Id int) error {
+	query := "delete from patients where Id = ?"
+	_, err := s.DB.Exec(query, Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *SqlStore) ExistsPatient(dni string) bool {
+	query := "select Id_patient from patients where dni like ?"
+	row := s.DB.QueryRow(query, dni)
+	var Id int
+	if err := row.Scan(&Id); err != nil {
+		return false
+	}
+
+	if Id > 0 {
+		return true
+	}
+
+	return false
+}
+
+func (s *SqlStore) GetTurnById(Id int64) (*domain.Turn, error) {
 	var turn domain.Turn
 	var patientId int64
 	var dentistId int64
 	queryT := "SELECT * FROM Turns WHERE id = ?;"
-	rowT := s.DB.QueryRow(queryT, id)
+	rowT := s.DB.QueryRow(queryT, Id)
 	errT := rowT.Scan(&turn.Id, &patientId, &dentistId, &turn.DateHour, &turn.Description)
 	if errT != nil {
 		return nil, errT

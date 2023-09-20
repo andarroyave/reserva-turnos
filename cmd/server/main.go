@@ -7,6 +7,7 @@ import (
 	"github.com/andarroyave/reserva-turnos/cmd/server/handler"
 	"github.com/andarroyave/reserva-turnos/cmd/server/middlewares"
 	"github.com/andarroyave/reserva-turnos/docs"
+	"github.com/andarroyave/reserva-turnos/internal/patient"
 	"github.com/andarroyave/reserva-turnos/internal/turn"
 	"github.com/andarroyave/reserva-turnos/pkg/store"
 	"github.com/gin-gonic/gin"
@@ -30,7 +31,7 @@ func main() {
 	secretKey := os.Getenv("SECRET_KEY")
 	publicKey := "public"
 
-	datasource := "root:password@tcp(localhost:3306)/reserva-turnos"
+	datasource := "root:Digital-21@tcp(localhost:3306)/reserva-turnos"
 	TurnsDB, err := sql.Open("mysql", datasource)
 	if err != nil {
 		panic(err)
@@ -40,16 +41,33 @@ func main() {
 		panic(err)
 	}
 
+	authMid := middlewares.NewAuth(publicKey, secretKey)
+	server := gin.Default()
+
 	storage := store.SqlStore{TurnsDB}
 	turnsRepo := turn.Repository{&storage}
 	turnService := turn.Service{&turnsRepo}
 	turnHandler := handler.TurnHandler{&turnService}
 
-	authMid := middlewares.NewAuth(publicKey, secretKey)
-	server := gin.Default()
+	repo := patient.NewRepository(&storage)
+	service := patient.NewService(repo)
+	patientHandler := handler.NewPatientHandler(service)
+
+	
 
 	docs.SwaggerInfo.Host = "localhost:8085"
 	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	patients := server.Group("/patients")
+	{
+		patients.GET("/getByID/:id", patientHandler.GetById())
+		patients.GET("/getAll", patientHandler.GetAllPatients())
+		patients.POST("", authMid.AuthHeader, patientHandler.Post())
+		patients.DELETE("/:id", authMid.AuthHeader, patientHandler.Delete())
+		patients.PUT("/:id", authMid.AuthHeader, patientHandler.Put())
+	}
+
+
 
 	turnServer := server.Group("/turns")
 	turnServer.GET("/:id", turnHandler.GetTurnById)

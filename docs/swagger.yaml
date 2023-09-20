@@ -6,6 +6,74 @@ info:
   title: PI Reserva Turnos
   version: "1.0"
 paths:
+  /patient:
+    delete:
+      description: Delete patient
+      parameters:
+      - description: patient id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Delete patient by id
+      tags:
+      - Patient
+  /patients:
+    post:
+      consumes:
+      - application/json
+      description: Create patient
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Create patient
+      tags:
+      - Patient
+    put:
+      consumes:
+      - application/json
+      description: Update patient
+      parameters:
+      - description: patient id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update patient by id
+      tags:
+      - Patient
+  /patients/:id:
+    get:
+      description: Get patient
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get patient by Id
+      tags:
+      - Patient
+  /patients/GetAll:
+    get:
+      description: Get All patients
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get all patients
+      tags:
+      - Patient
   /turns:
     delete:
       description: Delete turn

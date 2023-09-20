@@ -6,5 +6,5 @@ type Patient struct {
 	LastName      string `json:"lastname"`
 	Address       string `json:"address"`
 	DNI           string `json:"dni"`
-	DischargeDate string `json:"discharge_date"`
+	DischargeDate string `json:"dischargedate"`
 }
